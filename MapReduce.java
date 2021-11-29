@@ -32,10 +32,11 @@ public class MapReduce {
         job.setOutputValueClass(IntWritable.class);
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
-        bNumber = args[2];
         //input the b number when running the application to calculate the number of ngrams
         if (args[2].isEmpty()){ // setting default value to
             bNumber = "927160";
+        } else {
+            bNumber = args[2];
         }
         System.exit(job.waitForCompletion(true) ? 0 : 1);
 
