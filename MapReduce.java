@@ -2,8 +2,8 @@
 //source references: https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html,
 // https://stackoverflow.com/questions/47128975/ascending-sort-based-on-values-of-the-reducer/47130876,
 // https://learn.lboro.ac.uk/pluginfile.php/1660037/mod_resource/content/1/lecture05-programmingmr.pdf
-//Google Storage Path - input directory: gs://hadoopbucket1234_input
-//Google Storage Path - output directory: gs://hadoopbucket1234_output
+//Google Storage Path - input directory: gs://hadoopbucket1234/input
+//Google Storage Path - output directory: gs://hadoopbucket1234/output
 
 import java.util.*;
 import java.io.IOException;
@@ -26,15 +26,17 @@ public class MapReduce {
         Job job = Job.getInstance(conf, "n-grams");
         job.setJarByClass(MapReduce.class);
         job.setMapperClass(MRMapper.class);
+        job.setCombinerClass(MRReducer.class);
         job.setReducerClass(MRReducer.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
-        bNumber = args[2];
         //input the b number when running the application to calculate the number of ngrams
         if (args[2]==null){ // setting default value to
             bNumber = "927160";
+        } else {
+            bNumber = args[2];
         }
         System.exit(job.waitForCompletion(true) ? 0 : 1);
 
@@ -100,12 +102,11 @@ public class MapReduce {
             sorting (context);
         }
 
-        @Override
         protected void sorting (Context context) throws IOException, InterruptedException {
             Set<Map.Entry<Text,IntWritable>> set = alphSort.entrySet();
             List<Map.Entry<Text, IntWritable>> list = new ArrayList<>(set); //changing to arraylist so it can be sorted
             Collections.sort(list, new Comparator<Map.Entry<Text, IntWritable>>() {
-//                @Override
+
                 //method for sorting the key alphabetically
                 public int compare(Map.Entry<Text, IntWritable> o1, Map.Entry<Text, IntWritable> o2) {
                     return (o2.getKey()).compareTo(o1.getKey()); //comparing key to previous key
