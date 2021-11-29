@@ -2,8 +2,8 @@
 //source references: https://hadoop.apache.org/docs/stable/hadoop-mapreduce-client/hadoop-mapreduce-client-core/MapReduceTutorial.html,
 // https://stackoverflow.com/questions/47128975/ascending-sort-based-on-values-of-the-reducer/47130876,
 // https://learn.lboro.ac.uk/pluginfile.php/1660037/mod_resource/content/1/lecture05-programmingmr.pdf
-//Google Storage Path - input directory:
-//Google Storage Path - output directory:
+//Google Storage Path - input directory: gs://hadoopbucket1234_input
+//Google Storage Path - output directory: gs://hadoopbucket1234_output
 
 import java.util.*;
 import java.io.IOException;
